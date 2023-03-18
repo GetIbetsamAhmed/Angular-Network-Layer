@@ -13,15 +13,9 @@ export class NetworkLayerService {
     reqParams?: HttpParams, reqHeaders?: HttpHeaders, responseType?: any): Observable<any> {
     const httpObserve: any = 'response';
     const httpResponseType = responseType ? responseType : 'json';
-    if (!reqHeaders) {
-      reqHeaders = new HttpHeaders();
-      reqHeaders = reqHeaders.set('Content-Type', 'application/json');
-      reqHeaders = reqHeaders.set('Access-Control-Allow-Origin', '*');
-    }
 
     const httpOptions = {
-      body: reqBody,
-      headers: reqHeaders,
+      body: JSON.stringify(reqBody),
       params: reqParams,
       responseType: httpResponseType,
       observe: httpObserve

@@ -9,10 +9,9 @@ import { NetworkLayerService } from '../NetworkService/network-layer.service';
 export class RepsositoryService {
   constructor(private http: HttpClient, private networkLayer: NetworkLayerService) { }
 
-  baseURL: string = "https://polkadot.betalogics.com/app/mobile/polkadot/"
+  baseURL: string = "https://teamway.holodeck.xyz/api/"
 
-
-  public get(endpoint: string, responseType?: any, params?: any): Observable<any> {
+  public get(endpoint: string, params?: any): Observable<any> {
     let reqParams: HttpParams = new HttpParams();
     if (params) {
       reqParams = new HttpParams();
@@ -20,11 +19,11 @@ export class RepsositoryService {
         reqParams.append(key, params[key]);
       });
     }
-    return this.networkLayer.handleRequest('Get', this.baseURL + endpoint, null, reqParams, undefined, responseType);
+    return this.networkLayer.handleRequest('Get', this.baseURL + endpoint, null, reqParams);
   }
 
-  public post(url: string, endpoint: string, body: any, reqHeaders?: HttpHeaders, responseType?: any): Observable<any> {
-    return this.networkLayer.handleRequest('Post', url + endpoint, body, undefined, reqHeaders, responseType);
+  public post(endpoint: string, body: any, reqHeaders?: HttpHeaders, responseType?: any): Observable<any> {
+    return this.networkLayer.handleRequest('Post', this.baseURL + endpoint, body);
   }
 
   public upload(url: string, endpoint: string, formData: any, reportProgress = false): Observable<any> {
@@ -37,31 +36,14 @@ export class RepsositoryService {
     return this.http.post(url + endpoint, formData, httpOptions);
   }
 
-  public put(url: string, endpoint: string, body: any): Observable<any> {
-    let fullUrl = url + endpoint;
-    let setHeaders = new HttpHeaders();
-    setHeaders = setHeaders.set('Content-Type', 'application/json');
-    setHeaders = setHeaders.set('Access-Control-Allow-Origin', '*');
-    return this.networkLayer.handleRequest('Put', fullUrl, body, undefined, setHeaders, undefined);
-
-    // const httpObserve = 'response';
-    // const httpResponseType = 'json';
-
-    // const httpOptions = {
-    //   body,
-    //   headers: setHeaders,
-    //   responseType: httpResponseType,
-    //   observe: httpObserve
-    // };
-    // return this.getHttpRequest('Put', fullUrl, httpOptions);
+  public put(endpoint: string, body: any): Observable<any> {
+    let fullUrl = this.baseURL + endpoint;
+    return this.networkLayer.handleRequest('PATCH', fullUrl, body);
   }
 
   public delete(url: string, endpoint: string, body: any): Observable<any> {
     let fullUrl = url + endpoint;
-    let setHeaders = new HttpHeaders();
-    setHeaders = setHeaders.set('Content-Type', 'application/json');
-    setHeaders = setHeaders.set('Access-Control-Allow-Origin', '*');
-    return this.networkLayer.handleRequest('Delete', fullUrl, body, undefined, setHeaders, undefined);
+    return this.networkLayer.handleRequest('Delete', fullUrl, body);
 
     // let reqHeaders = new HttpHeaders();
     // reqHeaders = reqHeaders.set('Content-Type', 'application/json');
